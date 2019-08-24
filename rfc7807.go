@@ -42,11 +42,15 @@ func (e *ProblemDetail) FormatError(p xerrors.Printer) (next error) {
 func (e *ProblemDetail) Unwrap() error { return e.err }
 
 // New creates a new problem detail with the typo and detail without wrapping any error.
-func New(typo string, detail string) *ProblemDetail {
+func New(typo, detail string) *ProblemDetail {
+	status, title, ok := ExplainError(typo)
+	if ok && detail == "" {
+		detail = title
+	}
 	return &ProblemDetail{
 		Type:     typo,
-		Title:    mapping[typo].title,
-		Status:   mapping[typo].status,
+		Title:    title,
+		Status:   status,
 		Detail:   detail,
 		Instance: NewInstance(),
 	}
@@ -54,10 +58,14 @@ func New(typo string, detail string) *ProblemDetail {
 
 // Wrap wraps the err with the typo and detail into a problem detail.
 func Wrap(typo, detail string, err error) *ProblemDetail {
+	status, title, ok := ExplainError(typo)
+	if ok && detail == "" {
+		detail = title
+	}
 	return &ProblemDetail{
 		Type:     typo,
-		Title:    mapping[typo].title,
-		Status:   mapping[typo].status,
+		Title:    title,
+		Status:   status,
 		Detail:   detail,
 		Instance: NewInstance(),
 		err:      err,

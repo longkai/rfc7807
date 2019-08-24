@@ -10,7 +10,7 @@
 //
 //    rfc7807.Wrap(InternalError, "internal server error.", err)
 //
-// which supports Go 2 error as values proposal:
+// It supports Go 2 error as values proposal:
 //    https://go.googlesource.com/proposal/+/master/design/29934-error-values.md.
 //
 // Before using this package, you MUST provide a UUID generator function like
