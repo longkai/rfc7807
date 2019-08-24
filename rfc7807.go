@@ -8,8 +8,8 @@ import (
 	"golang.org/x/xerrors"
 )
 
-// NewInstance provides the instance id each time.
-var NewInstance = func() string {
+// NewInstanceID provides the instance id each time.
+var NewInstanceID = func() string {
 	return "WARNING: PLEASE PROVIDE AN INSTANCE ID GENERATOR."
 }
 
@@ -64,7 +64,7 @@ func New(typo, detail string) *ProblemDetail {
 		Title:    title,
 		Status:   status,
 		Detail:   detail,
-		Instance: NewInstance(),
+		Instance: NewInstanceID(),
 	}
 }
 
@@ -79,7 +79,7 @@ func Wrap(typo, detail string, err error) *ProblemDetail {
 		Title:    title,
 		Status:   status,
 		Detail:   detail,
-		Instance: NewInstance(),
+		Instance: NewInstanceID(),
 		err:      err,
 		frame:    xerrors.Caller(1),
 	}

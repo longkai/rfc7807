@@ -15,7 +15,7 @@
 //
 // Before using this package, you MUST provide a UUID generator function like
 //
-//    rfc7807.NewInstance = uuid.New().String
+//    rfc7807.NewInstanceID = func() string { return uuid.New().String() }
 //
 // If the predefined errors domain doesn't safatify the requirements,
 // you can patche the exported fields after obtaining one from the two methods above, `New` or `Wrap`.
