@@ -8,6 +8,18 @@ import (
 	"golang.org/x/xerrors"
 )
 
+// NewInstance provides the instance id each time.
+var NewInstance = func() string {
+	return "WARNING: PLEASE PROVIDE AN INSTANCE ID GENERATOR."
+}
+
+// Problem detail response content type.
+const (
+	ContentTypeXML  = "application/problem+xml; charset=utf8"
+	ContentTypeJSON = "application/problem+json; charset=utf8"
+	// ContentTypeJSONP = "application/problem+json; charset=utf8"
+)
+
 // ProblemDetail is the entity of RFC 7807.
 type ProblemDetail struct {
 	Type     string `json:"type" xml:"type"`
@@ -71,9 +83,4 @@ func Wrap(typo, detail string, err error) *ProblemDetail {
 		err:      err,
 		frame:    xerrors.Caller(1),
 	}
-}
-
-// NewInstance provides the instance id each time.
-var NewInstance = func() string {
-	return "WARNING: PLEASE PROVIDE AN INSTANCE ID GENERATOR."
 }
