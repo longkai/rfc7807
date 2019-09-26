@@ -22,11 +22,12 @@ const (
 
 // ProblemDetail is the entity of RFC 7807.
 type ProblemDetail struct {
-	Type     string `json:"type" xml:"type"`
-	Title    string `json:"title" xml:"title"`
-	Status   int    `json:"status" xml:"status"`
-	Detail   string `json:"detail" xml:"detail"`
-	Instance string `json:"instance" xml:"instance"`
+	Type       string      `json:"type" xml:"type"`
+	Title      string      `json:"title" xml:"title"`
+	Status     int         `json:"status" xml:"status"`
+	Detail     string      `json:"detail" xml:"detail"`
+	Instance   string      `json:"instance" xml:"instance"`
+	Extensions interface{} `json:"extensions,omitempty" xml:"extensions,omitempty"`
 
 	err   error
 	frame xerrors.Frame
