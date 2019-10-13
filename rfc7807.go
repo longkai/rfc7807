@@ -15,9 +15,9 @@ var NewInstanceID = func() string {
 
 // Problem detail response content type.
 const (
-	ContentTypeXML  = "application/problem+xml; charset=utf8"
-	ContentTypeJSON = "application/problem+json; charset=utf8"
-	// ContentTypeJSONP = "application/problem+json; charset=utf8"
+	ContentTypeXML  = "application/problem+xml; charset=utf-8"
+	ContentTypeJSON = "application/problem+json; charset=utf-8"
+	// ContentTypeJSONP = "application/problem+json; charset=utf-8"
 )
 
 // ProblemDetail is the entity of RFC 7807.
