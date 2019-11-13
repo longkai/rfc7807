@@ -1,9 +1,9 @@
 package rfc7807_test
 
 import (
-	"github.com/longkai/rfc7807"
 	"testing"
 
+	"github.com/longkai/rfc7807"
 	"golang.org/x/xerrors"
 )
 
