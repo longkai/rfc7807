@@ -5,19 +5,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/google/uuid"
 	"golang.org/x/xerrors"
-)
-
-// NewInstanceID provides the instance id each time.
-var NewInstanceID = func() string {
-	return "WARNING: PLEASE PROVIDE AN INSTANCE ID GENERATOR."
-}
-
-// Problem detail response content type.
-const (
-	ContentTypeXML  = "application/problem+xml; charset=utf-8"
-	ContentTypeJSON = "application/problem+json; charset=utf-8"
-	// ContentTypeJSONP = "application/problem+json; charset=utf-8"
 )
 
 // ProblemDetail is the entity of RFC 7807.
@@ -55,33 +44,52 @@ func (e *ProblemDetail) FormatError(p xerrors.Printer) (next error) {
 func (e *ProblemDetail) Unwrap() error { return e.err }
 
 // New creates a new problem detail with the typo and detail without wrapping any error.
-func New(typo, detail string) *ProblemDetail {
-	status, title, ok := ExplainError(typo)
-	if ok && detail == "" {
-		detail = title
-	}
+func New(code Code, detail string) *ProblemDetail {
+	val := mappings[code]
 	return &ProblemDetail{
-		Type:     typo,
-		Title:    title,
-		Status:   status,
+		Type:     val.typo,
+		Title:    val.title,
+		Status:   val.status,
 		Detail:   detail,
-		Instance: NewInstanceID(),
+		Instance: uuid.New().String(),
 	}
 }
 
 // Wrap wraps the err with the typo and detail into a problem detail.
-func Wrap(typo, detail string, err error) *ProblemDetail {
-	status, title, ok := ExplainError(typo)
-	if ok && detail == "" {
-		detail = title
-	}
+func Wrap(code Code, detail string, err error) *ProblemDetail {
+	val := mappings[code]
 	return &ProblemDetail{
-		Type:     typo,
-		Title:    title,
-		Status:   status,
+		Type:     val.typo,
+		Title:    val.title,
+		Status:   val.status,
 		Detail:   detail,
-		Instance: NewInstanceID(),
+		Instance: uuid.New().String(),
 		err:      err,
 		frame:    xerrors.Caller(1),
 	}
+}
+
+// Customize creates a limited domain rfc7807 problem detail.
+// Note you should provide a domain to limit the namespace of the problem, since it's different from canonical error codes for Google APIs.
+// So the problem type will be `domain.typo`.
+// Each typo and title should correspond one-to-one.
+// The cause may be nil if you do not have a cause error to wrap.
+// The extensions normally nil if no additional infomation passing.
+// Please consider using `New` or `Wrap` first, if they cannot convery your needs, then come back this func.
+func Customize(domain, typo, title, detail string, status int, cause error, extensions interface{}) *ProblemDetail {
+	if domain != "" {
+		typo = domain + "." + typo
+	}
+	pd := &ProblemDetail{
+		Type:       typo,
+		Title:      title,
+		Detail:     detail,
+		Status:     status,
+		Extensions: extensions,
+		Instance:   uuid.New().String(),
+	}
+	if cause != nil {
+		pd.err, pd.frame = cause, xerrors.Caller(1)
+	}
+	return pd
 }
