@@ -1,22 +1,23 @@
-// Package rfc7807 implements RFC 7807, Problem Details for HTTP APIs:
-//   https://tools.ietf.org/html/rfc7807.
-//
-// This package predefined Google's global domain errors.
-// To create a new problem detail, using
-//
-//    rfc7807.New(NotFound, "this item xxx is not found.")
-//
-// Or wrapping with a undelaying error
-//
-//    rfc7807.Wrap(InternalError, "internal server error.", err)
-//
-// It supports Go 2 error as values proposal:
-//    https://go.googlesource.com/proposal/+/master/design/29934-error-values.md.
-//
-// Before using this package, you MUST provide a UUID generator function like
-//
-//    rfc7807.NewInstanceID = func() string { return uuid.New().String() }
-//
-// If the predefined errors domain doesn't safatify the requirements,
-// you can patche the exported fields after obtaining one from the two methods above, `New` or `Wrap`.
+/*
+Package rfc7807 implements RFC 7807, Problem Details for HTTP APIs:
+	https://tools.ietf.org/html/rfc7807.
+
+This package predefined Google's gRPC canonical error codes:
+	https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto.
+
+To create a new problem detail:
+
+	rfc7807.New(rfc7807.NotFound, "xxx is not found.")
+
+Or wrap with a underlying error:
+
+	rfc7807.Wrap(rfc7807.Internal, "", causeError)
+
+It supports Go 2 error as values proposal:
+	https://go.googlesource.com/proposal/+/master/design/29934-error-values.md.
+
+If the predefined errors doesn't satisfy your needs:
+
+	rfc7807.Customize("my.error.domain", "MY_ERROR_TYPE", 400, nil, nil)
+*/
 package rfc7807

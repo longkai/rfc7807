@@ -2,30 +2,27 @@
 
 [![GoDoc](https://godoc.org/github.com/longkai/rfc7807?status.svg)](http://godoc.org/github.com/longkai/rfc7807)
 
-Package rfc7807 implements RFC 7807, Problem Details for HTTP APIs: https://tools.ietf.org/html/rfc7807.
+Package rfc7807 implements RFC 7807, Problem Details for HTTP APIs:
+	https://tools.ietf.org/html/rfc7807.
 
-This package predefined Google's global domain errors.
-To create a new problem detail, using
+This package predefined Google's gRPC canonical error codes:
+	https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto.
 
-`rfc7807.New(NotFound, "this item xxx is not found.")`
+To create a new problem detail:
 
-Or wrapping with a undelaying error
+	rfc7807.New(rfc7807.NotFound, "xxx is not found.")
 
-`rfc7807.Wrap(InternalError, "internal server error.", err)`
+Or wrap with a underlying error:
 
-It supports Go 2 Error Inspection proposal:
+	rfc7807.Wrap(rfc7807.Internal, "", causeError)
 
-https://go.googlesource.com/proposal/+/master/design/29934-error-values.md.
+It supports Go 2 error as values proposal:
+	https://go.googlesource.com/proposal/+/master/design/29934-error-values.md.
 
-Before using this package, you MUST provide a UUID generator function like
+If the predefined errors doesn't satisfy your needs:
 
-`rfc7807.NewInstanceID = func() string { return uuid.New().String() }`
-
-If the predefined errors domain doesn't safatify the requirements,
-you can patche the exported fields after obtaining one from the two methods above, `New` or `Wrap`.
+	rfc7807.Customize("my.error.domain", "MY_ERROR_TYPE", 400, nil, nil)
 
 ### Install
 
 `go get github.com/longkai/rfc7807`
-
-
