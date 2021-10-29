@@ -1,4 +1,4 @@
-module github.com/longkai/rfc7807
+module github.com/skailhq/rfc7807
 
 go 1.12
 

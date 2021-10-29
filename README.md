@@ -1,6 +1,6 @@
 # RFC 7807
 
-[![GoDoc](https://godoc.org/github.com/longkai/rfc7807?status.svg)](http://godoc.org/github.com/longkai/rfc7807)
+[![GoDoc](https://godoc.org/github.com/skailhq/rfc7807?status.svg)](http://godoc.org/github.com/skailhq/rfc7807)
 
 Package rfc7807 implements RFC 7807, Problem Details for HTTP APIs:
 	https://tools.ietf.org/html/rfc7807.
@@ -25,4 +25,4 @@ If the predefined errors doesn't satisfy your needs:
 
 ### Install
 
-`go get github.com/longkai/rfc7807`
+`go get github.com/skailhq/rfc7807`

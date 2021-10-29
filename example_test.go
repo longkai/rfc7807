@@ -2,10 +2,10 @@ package rfc7807_test
 
 import (
 	"fmt"
-	"io"
-
-	"github.com/longkai/rfc7807"
+	"github.com/skailhq/rfc7807"
 	"golang.org/x/xerrors"
+	"io"
+	"regexp"
 )
 
 func ExampleNew() {
@@ -21,13 +21,16 @@ func ExampleWrap() {
 	err.Instance = "example only, do not set this field"
 	// Note: the output prints the stacktrace of the error wrapping chain, so it won't be passed in other environment.
 	// Just showing the wrapping output format.
-	fmt.Printf("%+v\n", err)
+	result := fmt.Sprintf("%+v\n", err)
+	var re = regexp.MustCompile(`([^ ]*)/rfc7807/(.*)`)
+	s := re.ReplaceAllString(result, `/src/rfc7807/.$2`)
+	fmt.Println(s)
 	// Output: {"type":"INTERNAL","title":"Internal server error. Typically a server bug.","status":500,"detail":"","instance":"example only, do not set this field"}:
-	//     github.com/longkai/rfc7807_test.ExampleWrap
-	//         /Users/longkai/Dropbox/src/rfc7807/example_test.go:20
+	//     github.com/skailhq/rfc7807_test.ExampleWrap
+	//         /src/rfc7807/.example_test.go:20
 	//   - read /path/to/file:
-	//     github.com/longkai/rfc7807_test.ExampleWrap
-	//         /Users/longkai/Dropbox/src/rfc7807/example_test.go:19
+	//     github.com/skailhq/rfc7807_test.ExampleWrap
+	//         /src/rfc7807/.example_test.go:19
 	//   - EOF
 }
 
