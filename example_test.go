@@ -23,14 +23,14 @@ func ExampleWrap() {
 	// Just showing the wrapping output format.
 	result := fmt.Sprintf("%+v\n", err)
 	var re = regexp.MustCompile(`([^ ]*)/rfc7807/(.*)`)
-	s := re.ReplaceAllString(result, `/src/rfc7807/.$2`)
+	s := re.ReplaceAllString(result, `/src/rfc7807/$2`)
 	fmt.Println(s)
 	// Output: {"type":"INTERNAL","title":"Internal server error. Typically a server bug.","status":500,"detail":"","instance":"example only, do not set this field"}:
 	//     github.com/skailhq/rfc7807_test.ExampleWrap
-	//         /src/rfc7807/.example_test.go:20
+	//         /src/rfc7807/example_test.go:20
 	//   - read /path/to/file:
 	//     github.com/skailhq/rfc7807_test.ExampleWrap
-	//         /src/rfc7807/.example_test.go:19
+	//         /src/rfc7807/example_test.go:19
 	//   - EOF
 }
 
