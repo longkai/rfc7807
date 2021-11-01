@@ -9,8 +9,8 @@ import (
 	"golang.org/x/xerrors"
 )
 
-// ProblemDetail is the entity of RFC 7807.
-type ProblemDetail struct {
+// ProblemDetails is the entity of RFC 7807.
+type ProblemDetails struct {
 	Type       string      `json:"type" xml:"type"`
 	Title      string      `json:"title" xml:"title"`
 	Status     int         `json:"status" xml:"status"`
@@ -20,9 +20,9 @@ type ProblemDetail struct {
 
 	err   error
 	frame xerrors.Frame
-}
+} // @name ProblemDetails
 
-func (e *ProblemDetail) Error() string {
+func (e *ProblemDetails) Error() string {
 	b, err := json.Marshal(e)
 	if err != nil {
 		log.Fatalf("rfc7807: %v", err) // Never happens.
@@ -31,22 +31,22 @@ func (e *ProblemDetail) Error() string {
 }
 
 // Format implements fmt.Formatter.
-func (e *ProblemDetail) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
+func (e *ProblemDetails) Format(s fmt.State, v rune) { xerrors.FormatError(e, s, v) }
 
 // FormatError implements xerrors.Formatter.
-func (e *ProblemDetail) FormatError(p xerrors.Printer) (next error) {
+func (e *ProblemDetails) FormatError(p xerrors.Printer) (next error) {
 	p.Print(e.Error())
 	e.frame.Format(p)
 	return e.err
 }
 
 // Unwrap implements xerrors.Wrapper.
-func (e *ProblemDetail) Unwrap() error { return e.err }
+func (e *ProblemDetails) Unwrap() error { return e.err }
 
 // New creates a new problem detail with the typo and detail without wrapping any error.
-func New(code Code, detail string) *ProblemDetail {
+func New(code Code, detail string) *ProblemDetails {
 	val := mappings[code]
-	return &ProblemDetail{
+	return &ProblemDetails{
 		Type:     val.typo,
 		Title:    val.title,
 		Status:   val.status,
@@ -56,9 +56,9 @@ func New(code Code, detail string) *ProblemDetail {
 }
 
 // Wrap wraps the err with the typo and detail into a problem detail.
-func Wrap(code Code, detail string, err error) *ProblemDetail {
+func Wrap(code Code, detail string, err error) *ProblemDetails {
 	val := mappings[code]
-	return &ProblemDetail{
+	return &ProblemDetails{
 		Type:     val.typo,
 		Title:    val.title,
 		Status:   val.status,
@@ -76,11 +76,11 @@ func Wrap(code Code, detail string, err error) *ProblemDetail {
 // The cause may be nil if you do not have a cause error to wrap.
 // The extensions normally nil if no additional infomation passing.
 // Please consider using `New` or `Wrap` first, if they cannot convery your needs, then come back this func.
-func Customize(domain, typo, title, detail string, status int, cause error, extensions interface{}) *ProblemDetail {
+func Customize(domain, typo, title, detail string, status int, cause error, extensions interface{}) *ProblemDetails {
 	if domain != "" {
 		typo = domain + "." + typo
 	}
-	pd := &ProblemDetail{
+	pd := &ProblemDetails{
 		Type:       typo,
 		Title:      title,
 		Detail:     detail,

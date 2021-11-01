@@ -18,7 +18,7 @@ func TestIs(t *testing.T) {
 func TestAs(t *testing.T) {
 	err := xerrors.New("err")
 	wrapErr := rfc7807.Wrap(rfc7807.NotFound, "", err)
-	e := &rfc7807.ProblemDetail{}
+	e := &rfc7807.ProblemDetails{}
 	if !xerrors.As(wrapErr, &e) { // Set pointer's pointer.
 		t.Errorf("xerror.As(%v, %v) = false", wrapErr, &e)
 	}
